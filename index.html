@@ -18,18 +18,34 @@ body{margin:0;min-height:100vh;background:#16140f;color:#f1ece2;font-family:syst
 .hd{display:flex;align-items:center;gap:14px;margin:8px 0 22px}
 .hd img{width:56px;height:56px;border-radius:14px}
 h1{font-size:1.4rem;margin:0}.hd p{color:#a39b8c;margin:2px 0 0;font-size:.85rem}
-a.app{display:block;text-decoration:none;color:inherit;background:#221f18;border:1px solid #3a352b;border-radius:18px;padding:18px 20px;margin-bottom:12px;transition:border-color .2s}
-a.app:hover,a.app:active{border-color:#e08b2b}
-a.app b{display:block;font-size:1.15rem;margin-bottom:4px}a.app b span{color:#e08b2b}
-a.app small{color:#a39b8c;font-size:.83rem;line-height:1.5}
-.sec{display:flex;align-items:baseline;gap:10px;margin:22px 4px 10px}
-.sec span{font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#e08b2b}
-.sec small{color:#8a8274;font-size:.78rem}
-.hd+.sec{margin-top:4px}
-.box{background:#1c1a14;border:1px solid #3a352b;border-radius:16px;padding:16px 18px;margin-top:18px}
-.box h2{font-size:.95rem;margin:0 0 8px}
-.box p,.box li{color:#bdb4a4;font-size:.84rem;line-height:1.55;margin:0}
-.box ol{margin:6px 0 0;padding-left:20px}
+.acc{background:#221f18;border:1px solid #3a352b;border-radius:18px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
+.acc.open{border-color:#4a4336}
+.acc-h{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:14px;width:100%;padding:16px 18px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.acc-h:focus-visible{outline:2px solid #e08b2b;outline-offset:-2px;border-radius:18px}
+.acc-h .ib{flex:none;width:44px;height:44px;border-radius:12px;background:#2e2a22;color:#e08b2b;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:700;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+.acc-h .tt{flex:1;min-width:0}
+.acc-h .tt b{display:block;font-size:1.12rem}
+.acc-h .tt small{display:block;color:#a39b8c;font-size:.8rem;margin-top:2px}
+.acc-h .chev{flex:none;width:22px;height:22px;stroke:#a39b8c;fill:none;stroke-width:2;transition:transform .25s}
+.acc.open .chev{transform:rotate(180deg);stroke:#e08b2b}
+.acc-b{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
+.acc.open .acc-b{grid-template-rows:1fr}
+.acc-i{overflow:hidden;min-height:0}
+.acc-c{padding:0 14px 14px}
+.acc.mini .acc-h{padding:12px 18px}
+.acc.mini .acc-h .tt b{font-size:.95rem}
+.acc.mini .acc-h .ib{width:34px;height:34px;font-size:1rem;border-radius:10px}
+.acc.mini .acc-c{padding:0 18px 16px}
+a.app{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;background:#1a1812;border:1px solid #332e25;border-radius:14px;padding:14px 16px;margin-top:8px;transition:border-color .2s,background .2s}
+a.app:first-child{margin-top:0}
+a.app:hover,a.app:active{border-color:#e08b2b;background:#1f1c15}
+a.app .t{flex:1;min-width:0}
+a.app b{display:block;font-size:1.02rem;margin-bottom:3px}a.app b span{color:#e08b2b}
+a.app small{color:#a39b8c;font-size:.8rem;line-height:1.45}
+a.app .go{flex:none;width:18px;height:18px;stroke:#6f675a;fill:none;stroke-width:2}
+.lbl{font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#6f675a;margin:22px 4px 8px}
+.acc p,.acc li{color:#bdb4a4;font-size:.84rem;line-height:1.55;margin:0}
+.acc ol{margin:6px 0 0;padding-left:20px}
 .btn{height:40px;padding:0 16px;border-radius:12px;border:1px solid #e08b2b;background:#e08b2b;color:#16140f;font-weight:700;font-size:.88rem;cursor:pointer}
 .btn.ghost{background:transparent;color:#e08b2b}
 .btn:disabled{opacity:.45;cursor:default}
@@ -46,33 +62,52 @@ a.app small{color:#a39b8c;font-size:.83rem;line-height:1.5}
 
 <div class="hd"><img src="icon-192.png" alt=""><div><h1>Latihan TOCFL</h1><p>華語文能力測驗 · Test &amp; Practice</p></div></div>
 
-<div class="sec"><span>Test</span><small>Soal ujian TOCFL · Band A, B, C</small></div>
-<a class="app" href="listening/"><b><span>聽力</span> Listening</b><small>Band A &amp; B · Tes 1–5 · audio asli · teks, pinyin &amp; terjemahan</small></a>
-<a class="app" href="reading/"><b><span>閱讀</span> Reading</b><small>Band A, B &amp; C · 14 tes · satu soal per layar · popup kosakata</small></a>
+<section class="acc" id="accTest">
+  <button class="acc-h" aria-expanded="false" aria-controls="bTest"><span class="ib">考</span><span class="tt"><b>Test</b><small>Listening · Reading · Band A, B, C</small></span><svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+  <div class="acc-b" id="bTest"><div class="acc-i"><div class="acc-c">
+    <a class="app" href="listening/"><span class="t"><b><span>聽力</span> Listening</b><small>Band A &amp; B · Tes 1–5 · audio asli · teks, pinyin &amp; terjemahan</small></span><svg class="go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+    <a class="app" href="reading/"><span class="t"><b><span>閱讀</span> Reading</b><small>Band A, B &amp; C · 14 tes · satu soal per layar · popup kosakata</small></span><svg class="go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+  </div></div></div>
+</section>
 
-<div class="sec"><span>Practice</span><small>Latihan harian</small></div>
-<a class="app" href="flashcards/"><b><span>詞彙</span> Latihan Kosakata</b><small>Flashcards kosakata TOCFL · kartu hafalan, kuis &amp; pelafalan</small></a>
+<section class="acc" id="accPractice">
+  <button class="acc-h" aria-expanded="false" aria-controls="bPractice"><span class="ib">練</span><span class="tt"><b>Practice</b><small>Latihan kosakata harian</small></span><svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+  <div class="acc-b" id="bPractice"><div class="acc-i"><div class="acc-c">
+    <a class="app" href="flashcards/"><span class="t"><b><span>詞彙</span> Latihan Kosakata</b><small>Flashcards kosakata TOCFL · kartu hafalan, kuis &amp; pelafalan</small></span><svg class="go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
+  </div></div></div>
+</section>
 
-<div class="box hide" id="install">
-  <h2>Pasang sebagai aplikasi</h2>
-  <div id="insIOS" class="hide"><p>Di iPhone/iPad (Safari):</p><ol>
-    <li>Tekan tombol <b>Bagikan</b> <svg class="ic" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v8h14v-8"/></svg> di bawah layar.</li>
-    <li>Pilih <b>Tambahkan ke Layar Utama</b>, lalu <b>Tambah</b>.</li>
-    <li>Buka aplikasi lewat ikon <b>TOCFL</b> di layar utama.</li></ol></div>
-  <div id="insBtn" class="hide"><p style="margin-bottom:10px">Pasang di layar utama HP atau komputer Anda:</p><button class="btn" id="doInstall">Pasang aplikasi</button></div>
-  <div id="insOther" class="hide"><p>Buka menu browser (⋮), lalu pilih <b>Instal aplikasi</b> atau <b>Tambahkan ke layar utama</b>.</p></div>
-</div>
+<div class="lbl" id="moreLbl">Lainnya</div>
 
-<div class="box" id="offBox">
-  <h2>Simpan untuk dipakai offline</h2>
-  <p>Soal yang sudah dibuka otomatis tersimpan. Untuk menyimpan semuanya sekaligus (pakai Wi-Fi):</p>
-  <div id="dlList" style="margin-top:8px"></div>
-  <div class="note" id="store"></div>
-</div>
+<section class="acc mini hide" id="install">
+  <button class="acc-h" aria-expanded="false" aria-controls="bInstall"><span class="ib">⤓</span><span class="tt"><b>Pasang sebagai aplikasi</b></span><svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+  <div class="acc-b" id="bInstall"><div class="acc-i"><div class="acc-c">
+    <div id="insIOS" class="hide"><p>Di iPhone/iPad (Safari):</p><ol>
+      <li>Tekan tombol <b>Bagikan</b> <svg class="ic" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v8h14v-8"/></svg> di bawah layar.</li>
+      <li>Pilih <b>Tambahkan ke Layar Utama</b>, lalu <b>Tambah</b>.</li>
+      <li>Buka aplikasi lewat ikon <b>TOCFL</b> di layar utama.</li></ol></div>
+    <div id="insBtn" class="hide"><p style="margin-bottom:10px">Pasang di layar utama HP atau komputer Anda:</p><button class="btn" id="doInstall">Pasang aplikasi</button></div>
+    <div id="insOther" class="hide"><p>Buka menu browser (⋮), lalu pilih <b>Instal aplikasi</b> atau <b>Tambahkan ke layar utama</b>.</p></div>
+  </div></div></div>
+</section>
+
+<section class="acc mini" id="offBox">
+  <button class="acc-h" aria-expanded="false" aria-controls="bOff"><span class="ib">↓</span><span class="tt"><b>Simpan untuk dipakai offline</b></span><svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+  <div class="acc-b" id="bOff"><div class="acc-i"><div class="acc-c">
+    <p>Soal yang sudah dibuka otomatis tersimpan. Untuk menyimpan semuanya sekaligus (pakai Wi-Fi):</p>
+    <div id="dlList" style="margin-top:8px"></div>
+    <div class="note" id="store"></div>
+  </div></div></div>
+</section>
 
 </div>
 <script>
 const $ = s => document.querySelector(s);
+document.querySelectorAll('.acc-h').forEach(btn => btn.addEventListener('click', () => {
+  const acc = btn.closest('.acc'), open = !acc.classList.contains('open');
+  acc.classList.toggle('open', open); btn.setAttribute('aria-expanded', open);
+}));
+const syncMore = () => $('#moreLbl').classList.toggle('hide', $('#install').classList.contains('hide') && $('#offBox').classList.contains('hide'));
 const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 const iOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 let deferred = null;
@@ -82,7 +117,7 @@ if(!standalone){
 }
 addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; $('#insOther').classList.add('hide'); $('#insBtn').classList.remove('hide'); });
 $('#doInstall').onclick = async () => { if(!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $('#insBtn').classList.add('hide'); };
-addEventListener('appinstalled', () => $('#install').classList.add('hide'));
+addEventListener('appinstalled', () => { $('#install').classList.add('hide'); syncMore(); });
 
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 const mb = n => (n / 1048576).toFixed(n > 104857600 ? 0 : 1) + ' MB';
@@ -124,6 +159,6 @@ async function init(){
   });
   storeInfo();
 }
-init();
+init().then(syncMore, syncMore); syncMore();
 </script>
 </body></html>
