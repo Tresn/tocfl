@@ -26,7 +26,7 @@
   });
   if(L !== 'en') return;
   document.documentElement.lang = 'en';
-  var EX = {"Latihan TOCFL": "TOCFL Practice", "Pengaturan": "Settings", "Tutup": "Close", "Bahasa": "Language", "Tema": "Theme", "Gelap": "Dark", "Terang": "Light", "Berlaku untuk Listening, Reading, dan Latihan Kosakata.": "Applies to Listening, Reading and Vocabulary Practice.", "Pengaturan suara, voice, dan pinyin ada di dalam Latihan Kosakata.": "Sound, voice and pinyin settings are inside Vocabulary Practice.", "Band A & B · Tes 1–5 · audio asli · teks, pinyin & terjemahan": "Band A & B · Tests 1–5 · original audio · text, pinyin & translation", "Band A, B & C · 14 tes · satu soal per layar · popup kosakata": "Band A, B & C · 14 tests · one question per screen · vocabulary pop-up", "Latihan kosakata harian": "Daily vocabulary practice", "Latihan Kosakata": "Vocabulary Practice", "Flashcards kosakata TOCFL · kartu hafalan, kuis & pelafalan": "TOCFL vocabulary flashcards · memory cards, quizzes & pronunciation", "Lainnya": "More", "Pasang sebagai aplikasi": "Install as an app", "Pasang": "Install", "Tekan": "Tap", "Bagikan": "Share", "lalu": "then", "Tambahkan ke Layar Utama": "Add to Home Screen", "Menu browser (⋮) →": "Browser menu (⋮) →", "Instal aplikasi": "Install app", "Ikon TOCFL di layar utama": "TOCFL icon on your home screen", "Simpan untuk dipakai offline": "Save for offline use", "Soal yang sudah dibuka otomatis tersimpan. Untuk menyimpan semuanya sekaligus (pakai Wi-Fi):": "Questions you open are saved automatically. To save everything at once (use Wi-Fi):", "Reading · semua 14 tes": "Reading · all 14 tests", "Listening · Band A (Tes 1–5)": "Listening · Band A (Tests 1–5)", "Listening · Band B (Tes 1–5)": "Listening · Band B (Tests 1–5)", "Simpan": "Save", "Menyimpan…": "Saving…", "Tersimpan": "Saved", "Coba lagi": "Try again"}, PH = {"tersimpan ✓": "saved ✓", "tersimpan": "saved", "file gagal — periksa koneksi lalu coba lagi": "files failed — check your connection and try again", "Tersimpan di perangkat:": "Stored on this device:", "dari ruang": "out of", "yang tersedia.": "available."};
+  var EX = {"Ada error atau masukan?": "Found a bug or have feedback?", "Hubungi lewat Instagram": "Contact on Instagram", "Latihan TOCFL": "TOCFL Practice", "Pengaturan": "Settings", "Tutup": "Close", "Bahasa": "Language", "Tema": "Theme", "Gelap": "Dark", "Terang": "Light", "Berlaku untuk Listening, Reading, dan Latihan Kosakata.": "Applies to Listening, Reading and Vocabulary Practice.", "Pengaturan suara, voice, dan pinyin ada di dalam Latihan Kosakata.": "Sound, voice and pinyin settings are inside Vocabulary Practice.", "Band A & B · Tes 1–5 · audio asli · teks, pinyin & terjemahan": "Band A & B · Tests 1–5 · original audio · text, pinyin & translation", "Band A, B & C · 14 tes · satu soal per layar · popup kosakata": "Band A, B & C · 14 tests · one question per screen · vocabulary pop-up", "Latihan kosakata harian": "Daily vocabulary practice", "Latihan Kosakata": "Vocabulary Practice", "Flashcards kosakata TOCFL · kartu hafalan, kuis & pelafalan": "TOCFL vocabulary flashcards · memory cards, quizzes & pronunciation", "Lainnya": "More", "Pasang sebagai aplikasi": "Install as an app", "Pasang": "Install", "Tekan": "Tap", "Bagikan": "Share", "lalu": "then", "Tambahkan ke Layar Utama": "Add to Home Screen", "Menu browser (⋮) →": "Browser menu (⋮) →", "Instal aplikasi": "Install app", "Ikon TOCFL di layar utama": "TOCFL icon on your home screen", "Simpan untuk dipakai offline": "Save for offline use", "Soal yang sudah dibuka otomatis tersimpan. Untuk menyimpan semuanya sekaligus (pakai Wi-Fi):": "Questions you open are saved automatically. To save everything at once (use Wi-Fi):", "Reading · semua 14 tes": "Reading · all 14 tests", "Listening · Band A (Tes 1–5)": "Listening · Band A (Tests 1–5)", "Listening · Band B (Tes 1–5)": "Listening · Band B (Tests 1–5)", "Simpan": "Save", "Menyimpan…": "Saving…", "Tersimpan": "Saved", "Coba lagi": "Try again"}, PH = {"tersimpan ✓": "saved ✓", "tersimpan": "saved", "file gagal — periksa koneksi lalu coba lagi": "files failed — check your connection and try again", "Tersimpan di perangkat:": "Stored on this device:", "dari ruang": "out of", "yang tersedia.": "available."};
   var keys = Object.keys(PH).sort(function(a, b){ return b.length - a.length; });
   var esc = function(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); };
   var RE = new RegExp('(^|[^A-Za-zÀ-ɏ])(' + keys.map(esc).join('|') + ')(?=$|[^A-Za-zÀ-ɏ])', 'g');
@@ -79,6 +79,7 @@
 })();
 </script>
 <style>
+*,*::before,*::after{-webkit-tap-highlight-color:transparent}
 :root{--bg:#16140f;--text:#f1ece2;--sub:#a39b8c;--card:#221f18;--border:#3a352b;--border2:#4a4336;--chip:#2e2a22;--card2:#1a1812;--border3:#332e25;--card3:#1f1c15;--mute:#6f675a;--text2:#bdb4a4;--text3:#d8d0c0;--mute2:#8a8274;color-scheme:dark}
 :root[data-theme="light"]{--bg:#f6f3ec;--text:#1f1b14;--sub:#6e665a;--card:#fffdf8;--border:#e2dbcd;--border2:#cfc4af;--chip:#f3ece0;--card2:#faf7f0;--border3:#e6dfd2;--card3:#fff4e4;--mute:#a39a8b;--text2:#4e473c;--text3:#2e2a22;--mute2:#8a8274;color-scheme:light}
 .hd{position:relative}
@@ -131,6 +132,8 @@ h1{font-size:1.4rem;margin:0}.hd p{color:var(--sub);margin:2px 0 0;font-size:.85
 .inst .tt b{display:block;font-size:.95rem}
 .inst .tt small{display:block;color:var(--sub);font-size:.78rem;margin-top:2px;line-height:1.45}
 .inst .tt small b{display:inline;font-size:inherit;color:var(--text3)}
+.contact{text-decoration:none;color:inherit}
+.contact .go{flex:none;width:18px;height:18px;fill:none;stroke:var(--mute);stroke-width:2}
 .inst .ic{width:14px;height:14px;vertical-align:-2px}
 a.app{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;background:var(--card2);border:1px solid var(--border3);border-radius:14px;padding:14px 16px;margin-top:8px;transition:border-color .2s,background .2s}
 a.app:first-child{margin-top:0}
@@ -159,7 +162,7 @@ a.app .go{flex:none;width:18px;height:18px;stroke:var(--mute);fill:none;stroke-w
 <div class="hd"><img src="icon-192.png" alt=""><div><h1>Latihan TOCFL</h1><p>華語文能力測驗 · Test &amp; Practice</p></div><button class="gear" id="setBtn" title="Pengaturan" aria-label="Pengaturan"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></div>
 
 <section class="acc" id="accTest">
-  <button class="acc-h" aria-expanded="false" aria-controls="bTest"><span class="ib">考</span><span class="tt"><b>Test</b><small>Listening · Reading · Band A, B, C</small></span><svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+  <button class="acc-h" aria-expanded="false" aria-controls="bTest"><span class="ib">考</span><span class="tt"><b>TOCFL Test</b><small>Listening · Reading · Band A, B, C</small></span><svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
   <div class="acc-b" id="bTest"><div class="acc-i"><div class="acc-c">
     <a class="app" href="listening/"><span class="t"><b><span>聽力</span> Listening</b><small>Band A &amp; B · Tes 1–5 · audio asli · teks, pinyin &amp; terjemahan</small></span><svg class="go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
     <a class="app" href="reading/"><span class="t"><b><span>閱讀</span> Reading</b><small>Band A, B &amp; C · 14 tes · satu soal per layar · popup kosakata</small></span><svg class="go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></a>
@@ -193,6 +196,12 @@ a.app .go{flex:none;width:18px;height:18px;stroke:var(--mute);fill:none;stroke-w
     <div class="note" id="store"></div>
   </div></div></div>
 </section>
+
+<a class="inst contact" id="contact" href="https://www.instagram.com/pnde_tresna/" target="_blank" rel="noopener">
+  <span class="ib">IG</span>
+  <span class="tt"><b>Ada error atau masukan?</b><small>Hubungi lewat Instagram <b data-no-tr>@pnde_tresna</b></small></span>
+  <svg class="go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+</a>
 
 </div>
 <div class="ov" id="setOv"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="setT">
@@ -237,7 +246,7 @@ $('#sTheme').addEventListener('click', e => {
   paintSet();
 });
 try{ if(sessionStorage.getItem('tocfl-reopen-set')){ sessionStorage.removeItem('tocfl-reopen-set'); paintSet(); $('#setOv').classList.add('on'); } }catch(e){}
-const syncMore = () => $('#moreLbl').classList.toggle('hide', $('#install').classList.contains('hide') && $('#offBox').classList.contains('hide'));
+const syncMore = () => {};   // the contact card is always shown, so the label stays
 const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 const iOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 let deferred = null;
