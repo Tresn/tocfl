@@ -2,10 +2,10 @@
    - pages: network first, falls back to the saved copy when offline
    - images & audio: saved on the phone after the first use, then served from there
      (audio is requested in byte ranges, so ranges are cut from the saved file) */
-const SHELL = 'tocfl-shell-202611152217';
+const SHELL = 'tocfl-shell-202611160056';
 const MEDIA = 'tocfl-media-v1';
 const SHELL_FILES = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png',
-  'reading/', 'listening/', 'offline-files.json'];
+  'reading/', 'listening/', 'flashcards/', 'offline-files.json'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(SHELL).then(c => c.addAll(SHELL_FILES)).then(() => self.skipWaiting()));
