@@ -26,7 +26,7 @@
   });
   if(L !== 'en') return;
   document.documentElement.lang = 'en';
-  var EX = {"Ada error atau masukan?": "Found a bug or have feedback?", "Hubungi lewat Instagram": "Contact on Instagram", "Latihan TOCFL": "TOCFL Practice", "Pengaturan": "Settings", "Tutup": "Close", "Bahasa": "Language", "Tema": "Theme", "Gelap": "Dark", "Terang": "Light", "Berlaku untuk Listening, Reading, dan Latihan Kosakata.": "Applies to Listening, Reading and Vocabulary Practice.", "Pengaturan suara, voice, dan pinyin ada di dalam Latihan Kosakata.": "Sound, voice and pinyin settings are inside Vocabulary Practice.", "Band A & B · Tes 1–5 · audio asli · teks, pinyin & terjemahan": "Band A & B · Tests 1–5 · original audio · text, pinyin & translation", "Band A, B & C · 14 tes · satu soal per layar · popup kosakata": "Band A, B & C · 14 tests · one question per screen · vocabulary pop-up", "Latihan kosakata harian": "Daily vocabulary practice", "Latihan Kosakata": "Vocabulary Practice", "Flashcards kosakata TOCFL · kartu hafalan, kuis & pelafalan": "TOCFL vocabulary flashcards · memory cards, quizzes & pronunciation", "Lainnya": "More", "Pasang sebagai aplikasi": "Install as an app", "Pasang": "Install", "Tekan": "Tap", "Bagikan": "Share", "lalu": "then", "Tambahkan ke Layar Utama": "Add to Home Screen", "Menu browser (⋮) →": "Browser menu (⋮) →", "Instal aplikasi": "Install app", "Ikon TOCFL di layar utama": "TOCFL icon on your home screen", "Simpan untuk dipakai offline": "Save for offline use", "Soal yang sudah dibuka otomatis tersimpan. Untuk menyimpan semuanya sekaligus (pakai Wi-Fi):": "Questions you open are saved automatically. To save everything at once (use Wi-Fi):", "Reading · semua 14 tes": "Reading · all 14 tests", "Listening · Band A (Tes 1–5)": "Listening · Band A (Tests 1–5)", "Listening · Band B (Tes 1–5)": "Listening · Band B (Tests 1–5)", "Simpan": "Save", "Menyimpan…": "Saving…", "Tersimpan": "Saved", "Coba lagi": "Try again"}, PH = {"tersimpan ✓": "saved ✓", "tersimpan": "saved", "file gagal — periksa koneksi lalu coba lagi": "files failed — check your connection and try again", "Tersimpan di perangkat:": "Stored on this device:", "dari ruang": "out of", "yang tersedia.": "available."};
+  var EX = {"Nemu bug?": "Found a bug?", "Ada error atau masukan?": "Found a bug or have feedback?", "Hubungi lewat Instagram": "Contact on Instagram", "Latihan TOCFL": "TOCFL Practice", "Pengaturan": "Settings", "Tutup": "Close", "Bahasa": "Language", "Tema": "Theme", "Gelap": "Dark", "Terang": "Light", "Berlaku untuk Listening, Reading, dan Latihan Kosakata.": "Applies to Listening, Reading and Vocabulary Practice.", "Pengaturan suara, voice, dan pinyin ada di dalam Latihan Kosakata.": "Sound, voice and pinyin settings are inside Vocabulary Practice.", "Band A & B · Tes 1–5 · audio asli · teks, pinyin & terjemahan": "Band A & B · Tests 1–5 · original audio · text, pinyin & translation", "Band A, B & C · 14 tes · satu soal per layar · popup kosakata": "Band A, B & C · 14 tests · one question per screen · vocabulary pop-up", "Latihan kosakata harian": "Daily vocabulary practice", "Latihan Kosakata": "Vocabulary Practice", "Flashcards kosakata TOCFL · kartu hafalan, kuis & pelafalan": "TOCFL vocabulary flashcards · memory cards, quizzes & pronunciation", "Lainnya": "More", "Pasang sebagai aplikasi": "Install as an app", "Pasang": "Install", "Tekan": "Tap", "Bagikan": "Share", "lalu": "then", "Tambahkan ke Layar Utama": "Add to Home Screen", "Menu browser (⋮) →": "Browser menu (⋮) →", "Instal aplikasi": "Install app", "Ikon TOCFL di layar utama": "TOCFL icon on your home screen", "Simpan untuk dipakai offline": "Save for offline use", "Soal yang sudah dibuka otomatis tersimpan. Untuk menyimpan semuanya sekaligus (pakai Wi-Fi):": "Questions you open are saved automatically. To save everything at once (use Wi-Fi):", "Reading · semua 14 tes": "Reading · all 14 tests", "Listening · Band A (Tes 1–5)": "Listening · Band A (Tests 1–5)", "Listening · Band B (Tes 1–5)": "Listening · Band B (Tests 1–5)", "Simpan": "Save", "Menyimpan…": "Saving…", "Tersimpan": "Saved", "Coba lagi": "Try again"}, PH = {"tersimpan ✓": "saved ✓", "tersimpan": "saved", "file gagal — periksa koneksi lalu coba lagi": "files failed — check your connection and try again", "Tersimpan di perangkat:": "Stored on this device:", "dari ruang": "out of", "yang tersedia.": "available."};
   var keys = Object.keys(PH).sort(function(a, b){ return b.length - a.length; });
   var esc = function(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); };
   var RE = new RegExp('(^|[^A-Za-zÀ-ɏ])(' + keys.map(esc).join('|') + ')(?=$|[^A-Za-zÀ-ɏ])', 'g');
@@ -132,8 +132,8 @@ h1{font-size:1.4rem;margin:0}.hd p{color:var(--sub);margin:2px 0 0;font-size:.85
 .inst .tt b{display:block;font-size:.95rem}
 .inst .tt small{display:block;color:var(--sub);font-size:.78rem;margin-top:2px;line-height:1.45}
 .inst .tt small b{display:inline;font-size:inherit;color:var(--text3)}
-.contact{text-decoration:none;color:inherit}
-.contact .go{flex:none;width:18px;height:18px;fill:none;stroke:var(--mute);stroke-width:2}
+.foot{text-align:center;color:var(--sub);font-size:.72rem;margin:26px 0 8px;line-height:1.5}
+.foot a{color:inherit}
 .inst .ic{width:14px;height:14px;vertical-align:-2px}
 a.app{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;background:var(--card2);border:1px solid var(--border3);border-radius:14px;padding:14px 16px;margin-top:8px;transition:border-color .2s,background .2s}
 a.app:first-child{margin-top:0}
@@ -197,12 +197,8 @@ a.app .go{flex:none;width:18px;height:18px;stroke:var(--mute);fill:none;stroke-w
   </div></div></div>
 </section>
 
-<a class="inst contact" id="contact" href="https://www.instagram.com/pnde_tresna/" target="_blank" rel="noopener">
-  <span class="ib">IG</span>
-  <span class="tt"><b>Ada error atau masukan?</b><small>Hubungi lewat Instagram <b data-no-tr>@pnde_tresna</b></small></span>
-  <svg class="go" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
-</a>
 
+<footer class="foot"><span>Nemu bug?</span> IG: <span data-no-tr><a href="https://www.instagram.com/aldin_tk/" target="_blank" rel="noopener">aldin_tk</a> · <a href="https://www.instagram.com/pnde_tresna/" target="_blank" rel="noopener">pnde_tresna</a></span></footer>
 </div>
 <div class="ov" id="setOv"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="setT">
   <button class="x" id="setX" aria-label="Tutup">✕</button>
@@ -246,7 +242,7 @@ $('#sTheme').addEventListener('click', e => {
   paintSet();
 });
 try{ if(sessionStorage.getItem('tocfl-reopen-set')){ sessionStorage.removeItem('tocfl-reopen-set'); paintSet(); $('#setOv').classList.add('on'); } }catch(e){}
-const syncMore = () => {};   // the contact card is always shown, so the label stays
+const syncMore = () => $('#moreLbl').classList.toggle('hide', $('#install').classList.contains('hide') && $('#offBox').classList.contains('hide'));
 const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 const iOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 let deferred = null;
