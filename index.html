@@ -36,6 +36,13 @@ h1{font-size:1.4rem;margin:0}.hd p{color:#a39b8c;margin:2px 0 0;font-size:.85rem
 .acc.mini .acc-h .tt b{font-size:.95rem}
 .acc.mini .acc-h .ib{width:34px;height:34px;font-size:1rem;border-radius:10px}
 .acc.mini .acc-c{padding:0 18px 16px}
+.inst{display:flex;align-items:center;gap:14px;background:#221f18;border:1px solid #3a352b;border-radius:18px;padding:12px 14px 12px 18px;margin-bottom:12px}
+.inst .ib{flex:none;width:34px;height:34px;border-radius:10px;background:#2e2a22;color:#e08b2b;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700}
+.inst .tt{flex:1;min-width:0}
+.inst .tt b{display:block;font-size:.95rem}
+.inst .tt small{display:block;color:#a39b8c;font-size:.78rem;margin-top:2px;line-height:1.45}
+.inst .tt small b{display:inline;font-size:inherit;color:#d8d0c0}
+.inst .ic{width:14px;height:14px;vertical-align:-2px}
 a.app{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;background:#1a1812;border:1px solid #332e25;border-radius:14px;padding:14px 16px;margin-top:8px;transition:border-color .2s,background .2s}
 a.app:first-child{margin-top:0}
 a.app:hover,a.app:active{border-color:#e08b2b;background:#1f1c15}
@@ -79,16 +86,14 @@ a.app .go{flex:none;width:18px;height:18px;stroke:#6f675a;fill:none;stroke-width
 
 <div class="lbl" id="moreLbl">Lainnya</div>
 
-<section class="acc mini hide" id="install">
-  <button class="acc-h" aria-expanded="false" aria-controls="bInstall"><span class="ib">⤓</span><span class="tt"><b>Pasang sebagai aplikasi</b></span><svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
-  <div class="acc-b" id="bInstall"><div class="acc-i"><div class="acc-c">
-    <div id="insIOS" class="hide"><p>Di iPhone/iPad (Safari):</p><ol>
-      <li>Tekan tombol <b>Bagikan</b> <svg class="ic" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v8h14v-8"/></svg> di bawah layar.</li>
-      <li>Pilih <b>Tambahkan ke Layar Utama</b>, lalu <b>Tambah</b>.</li>
-      <li>Buka aplikasi lewat ikon <b>TOCFL</b> di layar utama.</li></ol></div>
-    <div id="insBtn" class="hide"><p style="margin-bottom:10px">Pasang di layar utama HP atau komputer Anda:</p><button class="btn" id="doInstall">Pasang aplikasi</button></div>
-    <div id="insOther" class="hide"><p>Buka menu browser (⋮), lalu pilih <b>Instal aplikasi</b> atau <b>Tambahkan ke layar utama</b>.</p></div>
-  </div></div></div>
+<section class="inst hide" id="install">
+  <span class="ib">⤓</span>
+  <span class="tt"><b>Pasang sebagai aplikasi</b>
+    <small id="insIOS" class="hide">Tekan <b>Bagikan</b> <svg class="ic" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v8h14v-8"/></svg> lalu <b>Tambahkan ke Layar Utama</b></small>
+    <small id="insOther" class="hide">Menu browser (⋮) → <b>Instal aplikasi</b></small>
+    <small id="insBtnTxt" class="hide">Ikon TOCFL di layar utama</small>
+  </span>
+  <button class="btn" id="doInstall" hidden>Pasang</button>
 </section>
 
 <section class="acc mini" id="offBox">
@@ -115,8 +120,8 @@ if(!standalone){
   $('#install').classList.remove('hide');
   if(iOS) $('#insIOS').classList.remove('hide'); else $('#insOther').classList.remove('hide');
 }
-addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; $('#insOther').classList.add('hide'); $('#insBtn').classList.remove('hide'); });
-$('#doInstall').onclick = async () => { if(!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $('#insBtn').classList.add('hide'); };
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; $('#insOther').classList.add('hide'); $('#insBtnTxt').classList.remove('hide'); $('#doInstall').hidden = false; });
+$('#doInstall').onclick = async () => { if(!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; $('#doInstall').hidden = true; };
 addEventListener('appinstalled', () => { $('#install').classList.add('hide'); syncMore(); });
 
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
