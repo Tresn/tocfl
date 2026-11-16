@@ -2,7 +2,7 @@
    - pages: network first, falls back to the saved copy when offline
    - images & audio: saved on the phone after the first use, then served from there
      (audio is requested in byte ranges, so ranges are cut from the saved file) */
-const SHELL = 'tocfl-shell-202611161359';
+const SHELL = 'tocfl-shell-202611162145';
 const MEDIA = 'tocfl-media-v1';
 const SHELL_FILES = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png',
   'reading/', 'listening/', 'flashcards/', 'offline-files.json'];
