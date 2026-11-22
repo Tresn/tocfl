@@ -7756,5 +7756,98 @@ document.addEventListener('keydown', e => {
     else { __ldp(100); setTimeout(() => { ld.style.opacity = '0'; setTimeout(() => ld.remove(), 300); }, 150); }
   }
 })();</script>
+<style>
+/* tap a word in an example sentence -> its meaning (added for the TOCFL site) */
+#peekBox .xw{ cursor:pointer; border-radius:4px; transition:background .15s; }
+#peekBox .xw:hover{ background:rgba(127,127,127,.18); }
+#peekBox .xw.on{ background:rgba(224,139,43,.28); }
+#xwPop{ position:absolute; z-index:5; min-width:150px; max-width:min(280px, calc(100% - 24px)); background:var(--card-bg, #2a2722); color:var(--text);
+  border:1px solid var(--border); border-radius:14px; box-shadow:0 10px 28px rgba(0,0,0,.35); padding:10px 12px 11px; text-align:left;
+  animation:xwIn .14s ease-out; }
+@keyframes xwIn{ from{ opacity:0; transform:translateY(4px); } to{ opacity:1; transform:none; } }
+#xwPop .xw-top{ display:flex; align-items:center; gap:10px; }
+#xwPop .xw-hz{ font-size:1.6rem; line-height:1.2; font-weight:600; }
+#xwPop .xw-py{ font-size:.95rem; margin-top:1px; }
+#xwPop .xw-m{ font-size:.9rem; line-height:1.4; margin-top:6px; color:var(--text); }
+#xwPop .xw-m.unk{ color:var(--sub); }
+#xwPop .xw-play{ margin-left:auto; flex:none; width:34px; height:34px; border-radius:50%; border:1px solid var(--border); background:transparent; color:var(--accent); display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; }
+#xwPop .xw-play svg{ width:15px; height:15px; fill:currentColor; }
+#xwPop .xw-arrow{ position:absolute; width:12px; height:12px; background:inherit; border-left:1px solid var(--border); border-top:1px solid var(--border); transform:rotate(45deg); top:-7px; }
+#xwPop.below-not .xw-arrow{ top:auto; bottom:-7px; transform:rotate(225deg); }
+</style>
+<script>
+(function(){
+  'use strict';
+  const PLAY = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+  let pop = null, curW = null;
+  function closePop(){ if(pop){ pop.remove(); pop = null; } if(curW){ document.querySelectorAll('#peekBox .xw.on').forEach(e => e.classList.remove('on')); curW = null; } }
+  // wrap every word of one example sentence, keeping the existing colours (the card's word is split into coloured spans)
+  function wrap(el){
+    if(el.dataset.xw) return; el.dataset.xw = '1';
+    const text = el.textContent; let toks;
+    try { toks = azTokens(text); } catch(e){ return; }
+    const ends = []; let at = 0;
+    toks.forEach((t, i) => { at += [...t.w].length; ends.push(at); });
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+    let pos = 0, ti = 0;
+    nodes.forEach(n => {
+      const ch = [...n.nodeValue], frag = document.createDocumentFragment();
+      let i = 0;
+      while(i < ch.length){
+        while(ti < toks.length && ends[ti] <= pos) ti++;
+        const take = Math.min(ch.length - i, (ends[ti] ?? (pos + ch.length - i)) - pos), piece = ch.slice(i, i + take).join(''), t = toks[ti];
+        if(t && !t.x){ const s = document.createElement('span'); s.className = 'xw'; s.dataset.k = ti; s.textContent = piece; frag.appendChild(s); }
+        else frag.appendChild(document.createTextNode(piece));
+        i += take; pos += take;
+      }
+      n.replaceWith(frag);
+    });
+    el._xwToks = toks;
+  }
+  function wrapAll(){ document.querySelectorAll('#peekBox .pk-ex-hz').forEach(wrap); }
+  function open(span){
+    const hz = span.closest('.pk-ex-hz'), toks = hz && hz._xwToks; if(!toks) return;
+    const k = +span.dataset.k, t = toks[k]; if(!t) return;
+    closePop(); curW = k;
+    hz.querySelectorAll('.xw[data-k="' + k + '"]').forEach(e => e.classList.add('on'));
+    let f; try { f = azInfo(t); } catch(e){ f = {py: '', m: '—'}; }
+    const py = f.py || '', m = t.r ? String(f.m).split(/;\s*/).slice(0, 3).join('; ') : f.m;
+    const box = document.getElementById('peekBox');
+    pop = document.createElement('div'); pop.id = 'xwPop';
+    pop.innerHTML = `<div class="xw-arrow"></div><div class="xw-top"><div><div class="xw-hz" lang="zh-TW">${py ? colorHanzi(t.w, py) : esc(t.w)}</div><div class="xw-py">${py ? colorPinyin(py) : ''}</div></div>
+      ${typeof HAS_TTS !== 'undefined' && HAS_TTS ? `<button type="button" class="xw-play" aria-label="Play">${PLAY}</button>` : ''}</div><div class="xw-m${f.unk ? ' unk' : ''}">${esc(String(m || '—'))}</div>`;
+    box.appendChild(pop);
+    const b = box.getBoundingClientRect(), r = span.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
+    let left = r.left - b.left + box.scrollLeft + r.width / 2 - pw / 2;
+    left = Math.max(8, Math.min(left, box.clientWidth - pw - 8));
+    let top = r.bottom - b.top + box.scrollTop + 8, below = true;
+    const visBottom = Math.min(b.bottom, innerHeight), visTop = Math.max(b.top, 0);
+    const roomBelow = visBottom - r.bottom - 12, roomAbove = r.top - visTop - 12;
+    if(roomBelow < ph && roomAbove > roomBelow){ top = r.top - b.top + box.scrollTop - ph - 8; below = false; }
+    pop.style.left = left + 'px'; pop.style.top = top + 'px';
+    if(!below) pop.classList.add('below-not');
+    const ar = pop.querySelector('.xw-arrow'); ar.style.left = Math.max(10, Math.min(pw - 22, r.left - b.left + r.width / 2 - left - 6)) + 'px';
+    const pb = pop.querySelector('.xw-play'); if(pb) pb.onclick = e => { e.stopPropagation(); try { speak(t.w, null); } catch(_){} };
+  }
+  function init(){
+    const box = document.getElementById('peekBox');
+    if(!box || typeof azTokens !== 'function' || typeof azInfo !== 'function'){ return setTimeout(init, 300); }
+    new MutationObserver(() => { if(pop && !box.contains(pop)) { pop = null; curW = null; } wrapAll(); }).observe(box, {childList: true, subtree: true});
+    // keep taps on words and on the bubble from closing the card
+    box.addEventListener('pointerdown', e => { if(e.target.closest('.xw, #xwPop')) e.stopPropagation(); });
+    box.addEventListener('click', e => {
+      const w = e.target.closest('.xw');
+      if(w){ e.stopPropagation(); if(w.classList.contains('on')) closePop(); else open(w); return; }
+      if(e.target.closest('#xwPop')){ e.stopPropagation(); return; }
+      closePop();
+    }, true);
+    box.addEventListener('scroll', closePop, {passive: true});
+    addEventListener('resize', closePop);
+    wrapAll();
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
 </body>
 </html>
