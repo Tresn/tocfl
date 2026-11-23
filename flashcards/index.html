@@ -7817,6 +7817,7 @@ document.addEventListener('keydown', e => {
     pop = document.createElement('div'); pop.id = 'xwPop';
     pop.innerHTML = `<div class="xw-arrow"></div><div class="xw-top"><div><div class="xw-hz" lang="zh-TW">${py ? colorHanzi(t.w, py) : esc(t.w)}</div><div class="xw-py">${py ? colorPinyin(py) : ''}</div></div>
       ${typeof HAS_TTS !== 'undefined' && HAS_TTS ? `<button type="button" class="xw-play" aria-label="Play">${PLAY}</button>` : ''}</div><div class="xw-m${f.unk ? ' unk' : ''}">${esc(String(m || '—'))}</div>`;
+    pop.addEventListener('click', e => e.stopPropagation());
     box.appendChild(pop);
     const b = box.getBoundingClientRect(), r = span.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
     let left = r.left - b.left + box.scrollLeft + r.width / 2 - pw / 2;
@@ -7839,7 +7840,7 @@ document.addEventListener('keydown', e => {
     box.addEventListener('click', e => {
       const w = e.target.closest('.xw');
       if(w){ e.stopPropagation(); if(w.classList.contains('on')) closePop(); else open(w); return; }
-      if(e.target.closest('#xwPop')){ e.stopPropagation(); return; }
+      if(e.target.closest('#xwPop')) return;          // the bubble stops the tap itself, after its buttons have run
       closePop();
     }, true);
     box.addEventListener('scroll', closePop, {passive: true});

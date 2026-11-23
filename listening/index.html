@@ -225,6 +225,21 @@
   .vrow .hz{ grid-row:span 2; font-size:1.35rem; font-weight:600; font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; white-space:nowrap; }
   .vrow .py{ font-size:.78rem; color:var(--accent); }
   .vrow .id{ font-size:.86rem; line-height:1.4; }
+  /* tap a word in the transcript / options -> its meaning */
+  #quizBox{ position:relative; }
+  .tw{ cursor:pointer; border-radius:4px; transition:background .15s; }
+  .tw:hover{ background:rgba(127,127,127,.18); }
+  .tw.on{ background:rgba(224,139,43,.3); }
+  #twPop{ position:absolute; z-index:5; min-width:150px; max-width:min(300px, calc(100% - 24px)); background:var(--card-bg); color:var(--text); border:1px solid var(--border);
+    border-radius:14px; box-shadow:0 10px 28px rgba(0,0,0,.35); padding:10px 12px 11px; text-align:left; animation:twIn .14s ease-out; }
+  @keyframes twIn{ from{ opacity:0; transform:translateY(4px); } to{ opacity:1; transform:none; } }
+  #twPop .tw-top{ display:flex; align-items:center; gap:10px; }
+  #twPop .tw-hz{ font-size:1.55rem; line-height:1.2; font-weight:600; font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; }
+  #twPop .tw-py{ font-size:.92rem; color:var(--accent); margin-top:2px; }
+  #twPop .tw-m{ font-size:.9rem; line-height:1.4; margin-top:6px; }
+  #twPop .vsay{ margin-left:auto; }
+  #twPop .tw-ar{ position:absolute; width:12px; height:12px; background:inherit; border-left:1px solid var(--border); border-top:1px solid var(--border); transform:rotate(45deg); top:-7px; }
+  #twPop.up .tw-ar{ top:auto; bottom:-7px; transform:rotate(225deg); }
   /* pronunciation in the vocabulary pop-up */
   .vrow{ grid-template-columns:minmax(64px,auto) 1fr auto; }
   .vrow .hz{ cursor:pointer; grid-column:1; grid-row:1 / span 2; }
@@ -565,7 +580,6 @@ function playerHTML(seekable, readBtn){
     <button class="pl-sm" id="plRe" title="Ulang dari awal" ${seekable?'':'disabled'}>${IC_BACK}</button>
     <button class="pl-sm" id="plSp" title="Kecepatan">${S.set.speed}×</button>
     ${readBtn ? `<button class="pl-sm rd ${S.set.read?'on':''}" id="plRd" title="Tampilkan teks sambil mendengar">${IC_BOOK}<span>Teks</span></button>` : ''}
-    ${readBtn ? `<button class="pl-sm rd vk" id="qzVoc" title="Arti kosakata"><b>字</b><span>Kosakata</span></button>` : ''}
   </div>`;
 }
 function fitPlayer(){
@@ -972,6 +986,77 @@ function showVocab(q){
     $('#vNone').style.display = [...box.querySelectorAll('.vrow')].some(r => r.style.display !== 'none') ? 'none' : ''; };
   openOverlay('#formOverlay'); box.scrollTop = 0;
 }
+/* tap words in the transcript (and in the options once answered): pinyin, meaning and pronunciation */
+let TW_IDX = null, TW_MAX = 1;
+function twIndex(){
+  if(TW_IDX) return TW_IDX;
+  TW_IDX = new Map();
+  LVOCAB.V.forEach((v, i) => { const w = v[0]; if(!TW_IDX.has(w)){ TW_IDX.set(w, i); TW_MAX = Math.max(TW_MAX, [...w].length); } });
+  return TW_IDX;
+}
+function twTokens(s){
+  const idx = twIndex(), out = [];
+  for(const m of s.matchAll(/[\u3400-\u9fff]+|[^\u3400-\u9fff]+/g)){
+    const run = [...m[0]];
+    if(!/[\u3400-\u9fff]/.test(m[0])){ out.push({w: m[0], i: -1}); continue; }
+    const n = run.length, best = [{c: 0, p: -1, i: -1}];
+    for(let e = 1; e <= n; e++){
+      best[e] = null;
+      for(let L = Math.min(TW_MAX, e); L >= 1; L--){
+        const w = run.slice(e - L, e).join(''), i = idx.has(w) ? idx.get(w) : -1;
+        if(i < 0 && L > 1) continue;
+        const c = best[e - L].c + (i >= 0 ? 1 : 2.5);          // fewest words; a character without a meaning costs more
+        if(!best[e] || c < best[e].c) best[e] = {c, p: e - L, i};
+      }
+    }
+    const part = [];
+    for(let e = n; e > 0; e = best[e].p) part.unshift({w: run.slice(best[e].p, e).join(''), i: best[e].i});
+    out.push(...part);
+  }
+  return out;
+}
+function twWrap(el){
+  if(el.dataset.tw) return; el.dataset.tw = '1';
+  el.innerHTML = twTokens(el.textContent).map(t => t.i >= 0 ? `<span class="tw" data-v="${t.i}">${esc(t.w)}</span>` : esc(t.w)).join('');
+}
+let twPop = null;
+function twClose(){ if(twPop){ twPop.remove(); twPop = null; } document.querySelectorAll('#quizBox .tw.on').forEach(e => e.classList.remove('on')); }
+function twOpen(span){
+  twClose();
+  const v = LVOCAB.V[+span.dataset.v]; if(!v) return;
+  const EN = window.TOCFL_LANG === 'en', m = EN && v[3] ? v[3] : v[2];
+  span.classList.add('on');
+  const box = $('#quizBox');
+  twPop = document.createElement('div'); twPop.id = 'twPop';
+  twPop.innerHTML = `<div class="tw-ar"></div><div class="tw-top"><div><div class="tw-hz" lang="zh-TW">${esc(v[0])}</div><div class="tw-py">${esc(v[1])}</div></div><button class="vsay" aria-label="Dengarkan" title="Dengarkan">${IC_SAY}</button></div><div class="tw-m">${esc(m)}</div>`;
+  twPop.addEventListener('click', e => e.stopPropagation());
+  box.appendChild(twPop);
+  const b = box.getBoundingClientRect(), r = span.getBoundingClientRect(), pw = twPop.offsetWidth, ph = twPop.offsetHeight;
+  let left = r.left - b.left + r.width / 2 - pw / 2; left = Math.max(10, Math.min(left, box.clientWidth - pw - 10));
+  const visBottom = Math.min(b.bottom, innerHeight), visTop = Math.max(b.top, 0);
+  let top = r.bottom - b.top + box.scrollTop + 8;
+  if(visBottom - r.bottom - 12 < ph && r.top - visTop - 12 > visBottom - r.bottom - 12){ top = r.top - b.top + box.scrollTop - ph - 8; twPop.classList.add('up'); }
+  twPop.style.left = left + 'px'; twPop.style.top = top + 'px';
+  twPop.querySelector('.tw-ar').style.left = Math.max(10, Math.min(pw - 22, r.left - b.left + r.width / 2 - left - 6)) + 'px';
+  twPop.querySelector('.vsay').onclick = e => { e.stopPropagation(); sayZh(v[0], null); };
+}
+function twWrapAll(){
+  if(!curQ || (typeof ctx !== 'undefined' && ctx && ctx.mode === 'exam')) return;
+  document.querySelectorAll('#quizBox .ln-zh').forEach(twWrap);
+  if(answered) document.querySelectorAll('#quizBox #opts .zh').forEach(twWrap);
+}
+(function(){
+  const box = $('#quizBox'); let pend = false;
+  new MutationObserver(() => { if(twPop && !box.contains(twPop)) twPop = null; if(pend) return; pend = true; queueMicrotask(() => { pend = false; twWrapAll(); }); }).observe(box, {childList: true, subtree: true});
+  box.addEventListener('click', e => {
+    const w = e.target.closest('.tw');
+    if(w){ e.stopPropagation(); e.preventDefault(); if(w.classList.contains('on')) twClose(); else twOpen(w); return; }
+    if(e.target.closest('#twPop')) return;          // the bubble stops the tap itself, after its buttons have run
+    twClose();
+  }, true);
+  box.addEventListener('scroll', twClose, {passive: true});
+  addEventListener('resize', twClose);
+})();
 /* ctx: {mode:'practice'|'exam'|'review', autoplay} */
 let curQ = null, ctx = null, answered = false, examPick = null;
 function showQ(n, c){
@@ -1108,6 +1193,7 @@ function choose(i){
   }
   if(answered) return;
   answered = true;
+  setTimeout(twWrapAll, 0);
   const ok = i === q.ans;
   S.ans[q.n] = {pick:i, ok, t:Date.now()}; save();
   paintAnswer(q, i, ok); revealTexts(q);
