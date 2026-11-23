@@ -610,20 +610,33 @@ document.addEventListener('keydown', e => {
 const SAY_OK = (() => { try { return !!(window.speechSynthesis && window.SpeechSynthesisUtterance && speechSynthesis.speak); } catch(e){ return false; } })();
 let zhVoice = null;
 function pickZhVoice(){
+  // same choice as Latihan Kosakata: the voice picked in its Settings ("Jenis suara"), else the best Mandarin voice
   if(!SAY_OK) return;
   let vs = []; try { vs = speechSynthesis.getVoices() || []; } catch(e){}
-  const r = v => /zh[-_]TW/i.test(v.lang) ? 0 : /^(zh[-_]CN|cmn|zh$|zh[-_]Hans)/i.test(v.lang) ? 1 : /^zh/i.test(v.lang) && !/HK|yue/i.test(v.lang) ? 2 : 9;
-  zhVoice = vs.filter(v => r(v) < 9).sort((a, b) => r(a) - r(b))[0] || null;
+  const isMandarin = v => { const l = (v.lang || '').replace('_','-').toLowerCase(), n = ((v.name || '') + ' ' + (v.voiceURI || '')).toLowerCase();
+    return /^(zh|cmn)/.test(l) && !/^zh-(hk|mo)|yue/.test(l) && !/cantonese|粵|粤|廣東|广东/.test(n); };
+  let chosen = ''; try { chosen = localStorage.getItem('tocfl-voice-v1') || ''; } catch(e){}
+  if(chosen){
+    const key = v => { const base = [v.voiceURI || '', v.name || '', v.lang || ''].join('|'); let n = 0; for(const x of vs){ if(x === v) break; if([x.voiceURI || '', x.name || '', x.lang || ''].join('|') === base) n++; } return base + '#' + n; };
+    const v = vs.find(x => key(x) === chosen); if(v && isMandarin(v)){ zhVoice = v; return; }
+  }
+  const score = v => { if(!isMandarin(v)) return -1; const l = (v.lang || '').replace('_','-').toLowerCase(), n = ((v.name || '') + ' ' + (v.voiceURI || '')).toLowerCase();
+    let sc = l === 'zh-tw' ? 100 : l.startsWith('zh-tw') ? 90 : 10;
+    if(/premium/.test(n)) sc += 50; else if(/enhanced/.test(n)) sc += 35; else if(/natural|neural|google|online/.test(n)) sc += 25;
+    if(/compact/.test(n)) sc -= 10; return sc; };
+  let best = null, bs = -1; vs.forEach(v => { const s = score(v); if(s > bs){ bs = s; best = v; } });
+  zhVoice = best;
 }
 if(SAY_OK){ try { pickZhVoice(); speechSynthesis.onvoiceschanged = pickZhVoice; } catch(e){} }
 function sayZh(text, row){
   if(!SAY_OK) return toast('Browser ini tidak mendukung suara. Coba buka di Chrome atau Safari.');
   
-  speechSynthesis.cancel();
+  speechSynthesis.cancel(); pickZhVoice();
+  try { if(navigator.audioSession && navigator.audioSession.type !== 'playback') navigator.audioSession.type = 'playback'; } catch(e){}
   document.querySelectorAll('.vrow.say').forEach(r => r.classList.remove('say'));
   const u = new SpeechSynthesisUtterance(text);
   if(zhVoice){ u.voice = zhVoice; u.lang = zhVoice.lang; } else u.lang = 'zh-TW';
-  u.rate = 0.8;
+  u.rate = 0.85; u.volume = 1;
   if(row){ row.classList.add('say'); u.onend = u.onerror = () => row.classList.remove('say'); }
   speechSynthesis.speak(u);
 }
