@@ -1055,7 +1055,7 @@ const IC_SAY = '<svg viewBox="0 0 24 24"><path d="M11 5L6 9H3v6h3l5 4z"/><path d
 const LVNAME = { N1:'準備一級', N2:'準備二級', A1:'入門級', A2:'基礎級', B1:'進階級', B2:'高階級', C1:'流利級' };
 function lvBadge(lv, full){
   if(!lv) return full ? `<span class="lvb x">Di luar daftar TOCFL</span>` : '';
-  return `<span class="lvb ${lv[0]}" title="TOCFL ${lv} · ${LVNAME[lv]}">${lv}${full ? ` <small>· ${LVNAME[lv]}</small>` : ''}</span>`;
+  return `<span class="lvb ${lv[0]}" title="TOCFL ${lv} · ${LVNAME[lv]}">${lv}</span>`;
 }
 function showVocab(q){
   const qv = LVOCAB.Q[band] && LVOCAB.Q[band][q.n-1]; if(!qv) return toast('Kosakata belum tersedia');
@@ -1120,7 +1120,7 @@ function twOpen(span){
   span.classList.add('on');
   const box = $('#quizBox');
   twPop = document.createElement('div'); twPop.id = 'twPop';
-  twPop.innerHTML = `<div class="tw-ar"></div><div class="tw-top"><div><div class="tw-hz" lang="zh-TW">${esc(v[0])}</div><div class="tw-py">${esc(v[1])}</div><div class="tw-lv">${lvBadge((LVOCAB.L || [])[+span.dataset.v] || '', true)}</div></div><button class="vsay" aria-label="Dengarkan" title="Dengarkan">${IC_SAY}</button></div><div class="tw-m">${esc(m)}</div>`;
+  twPop.innerHTML = `<div class="tw-ar"></div><div class="tw-top"><div><div class="tw-hz" lang="zh-TW">${esc(v[0])}</div><div class="tw-py">${esc(v[1])}</div><div class="tw-lv">${lvBadge((LVOCAB.L || [])[+span.dataset.v] || "", true)}</div></div><button class="vsay" aria-label="Dengarkan" title="Dengarkan">${IC_SAY}</button></div><div class="tw-m">${esc(m)}</div>`;
   twPop.addEventListener('click', e => e.stopPropagation());
   box.appendChild(twPop);
   const b = box.getBoundingClientRect(), r = span.getBoundingClientRect(), pw = twPop.offsetWidth, ph = twPop.offsetHeight;

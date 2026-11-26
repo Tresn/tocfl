@@ -649,7 +649,7 @@ const IC_SAY = '<svg viewBox="0 0 24 24"><path d="M11 5L6 9H3v6h3l5 4z"/><path d
 const LVNAME = { N1:'準備一級', N2:'準備二級', A1:'入門級', A2:'基礎級', B1:'進階級', B2:'高階級', C1:'流利級' };
 function lvBadge(lv, full){
   if(!lv) return full ? `<span class="lvb x">Di luar daftar TOCFL</span>` : '';
-  return `<span class="lvb ${lv[0]}" title="TOCFL ${lv} · ${LVNAME[lv]}">${lv}${full ? ` <small>· ${LVNAME[lv]}</small>` : ''}</span>`;
+  return `<span class="lvb ${lv[0]}" title="TOCFL ${lv} · ${LVNAME[lv]}">${lv}</span>`;
 }
 function showVocab(){
   if(exam) return toast('Kosakata tidak tersedia saat ujian');
